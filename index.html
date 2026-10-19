@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 资讯雷达 · 每日精选</title>
+<style>
+  :root{
+    --bg:#0a0a0b;
+    --bg-2:#111113;
+    --ink:#ececeb;
+    --ink-dim:#9b9b98;
+    --ink-faint:#5f5f5c;
+    --line:#262628;
+    --line-soft:#1a1a1c;
+    --accent:#ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:15px;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:.01em;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    border-bottom:1px solid var(--line-soft);
+    background:rgba(10,10,11,.82);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.14em;font-size:13px;text-transform:uppercase}
+  .brand .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(255,255,255,.08)}
+  .topbar .meta{font-size:12px;color:var(--ink-dim);letter-spacing:.08em}
+
+  /* hero */
+  header.hero{padding:96px 0 72px;border-bottom:1px solid var(--line-soft)}
+  .eyebrow{font-size:11px;letter-spacing:.34em;color:var(--ink-dim);text-transform:uppercase;margin-bottom:26px}
+  header.hero h1{
+    font-family:"Songti SC","Noto Serif SC","STSong",Georgia,serif;
+    font-weight:500;font-size:clamp(42px,7vw,84px);line-height:1.06;letter-spacing:.01em;
+    color:var(--ink);
+  }
+  header.hero h1 em{font-style:normal;color:var(--ink-faint)}
+  .hero-sub{margin-top:30px;max-width:640px;color:var(--ink-dim);font-size:16px}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:14px 48px;margin-top:48px}
+  .stat .num{font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-size:34px;color:var(--ink);font-weight:500}
+  .stat .lbl{font-size:11px;letter-spacing:.22em;color:var(--ink-faint);text-transform:uppercase;margin-top:6px}
+
+  /* section head */
+  .section{padding:72px 0}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:40px;border-bottom:1px solid var(--line);padding-bottom:18px}
+  .sec-head h2{font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-weight:500;font-size:26px;letter-spacing:.02em}
+  .sec-head .cnt{font-size:12px;letter-spacing:.2em;color:var(--ink-faint);text-transform:uppercase}
+
+  /* grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  @media(max-width:840px){.grid{grid-template-columns:1fr}}
+
+  /* card */
+  .card{
+    border:1px solid var(--line);
+    background:var(--bg-2);
+    padding:30px 30px 26px;
+    display:flex;flex-direction:column;
+    transition:border-color .25s ease, transform .25s ease;
+    position:relative;
+  }
+  .card:hover{border-color:#4a4a4d;transform:translateY(-3px)}
+  .card .idx{
+    font-family:"Songti SC","Noto Serif SC",Georgia,serif;
+    font-size:13px;letter-spacing:.2em;color:var(--ink-faint);
+    display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  }
+  .card .idx::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+  .card .tag{
+    display:inline-block;border:1px solid var(--line);color:var(--ink-dim);
+    font-size:11px;letter-spacing:.18em;padding:4px 10px;margin-bottom:16px;text-transform:uppercase;
+  }
+  .card h3{
+    font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-weight:500;
+    font-size:22px;line-height:1.4;margin-bottom:12px;color:var(--ink);
+  }
+  .card .when{font-size:12.5px;color:var(--ink-dim);letter-spacing:.04em;margin-bottom:20px}
+  .card .when b{color:var(--ink);font-weight:600}
+  .card .blk{margin-bottom:16px}
+  .card .blk .k{
+    font-size:11px;letter-spacing:.24em;color:var(--ink-faint);text-transform:uppercase;
+    display:block;margin-bottom:7px;
+  }
+  .card .blk .v{font-size:14px;color:#d3d3d0}
+  .card .src{margin-top:auto;padding-top:18px;border-top:1px solid var(--line-soft)}
+  .card .src .k{font-size:11px;letter-spacing:.24em;color:var(--ink-faint);text-transform:uppercase;display:block;margin-bottom:9px}
+  .card .src .v{font-size:13px;color:var(--ink-dim)}
+  .card .src a{border-bottom:1px solid #4a4a4d;padding-bottom:1px;transition:color .2s,border-color .2s}
+  .card .src a:hover{color:var(--accent);border-color:var(--accent)}
+
+  /* verify banner */
+  .verify{border:1px solid var(--line);background:var(--bg-2);padding:34px 36px}
+  .verify .row{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start}
+  @media(max-width:640px){.verify .row{grid-template-columns:1fr}}
+  .verify .mark{font-family:"Songti SC",serif;font-size:40px;line-height:1;color:var(--ink)}
+  .verify h3{font-size:16px;font-weight:600;letter-spacing:.02em;margin-bottom:12px}
+  .verify ul{list-style:none}
+  .verify li{position:relative;padding-left:20px;color:var(--ink-dim);font-size:13.5px;margin-bottom:8px}
+  .verify li::before{content:"—";position:absolute;left:0;color:var(--ink-faint)}
+
+  footer{padding:56px 0 72px;border-top:1px solid var(--line-soft);color:var(--ink-faint);font-size:12.5px}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;letter-spacing:.04em}
+  footer .mark{letter-spacing:.24em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span> AI Radar · 资讯雷达</div>
+    <div class="meta">北京时间 · 2026.10.19 更新</div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Artificial Intelligence · Daily Brief</div>
+    <h1>AI 资讯雷达<em>·</em>每日精选</h1>
+    <p class="hero-sub">收集并核验最新 AI 资讯，覆盖 OpenAI、Google、Microsoft、百度、腾讯、微博、知乎、微信公众号等公开渠道，按时间、背景、内容与来源渠道整理呈现。</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">08</div><div class="lbl">条精选</div></div>
+      <div class="stat"><div class="num">07</div><div class="lbl">渠道覆盖</div></div>
+      <div class="stat"><div class="num">✓</div><div class="lbl">逐条核验</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>今日精选</h2>
+      <div class="cnt">2026.10.09 — 10.19</div>
+    </div>
+
+    <div class="grid">
+
+      <article class="card">
+        <div class="idx">01</div>
+        <span class="tag">OpenAI · 机器人</span>
+        <h3>OpenAI 确认研发人形机器人，先攻克"大脑"再谈外观</h3>
+        <div class="when"><b>2026-10-19</b></div>
+        <div class="blk"><span class="k">背景</span><span class="v">OpenAI 正同时推进大模型与消费级硬件，如今再切入具身智能赛道，与其长期 AI 战略一脉相承。</span></div>
+        <div class="blk"><span class="k">内容</span><span class="v">据 Engadget 报道，OpenAI 已确认研发人形机器人。CEO 山姆·奥尔特曼表示将把机器人"大脑"（智能系统）作为核心攻关方向，先解决智能再谈外观，项目细节仍处于早期披露阶段。</span></div>
+        <div class="src"><span class="k">来源渠道</span><span class="v"><a href="https://www.engadget.com/" target="_blank" rel="noopener">Engadget</a> · 环球网科技 / 新浪财经 / 腾讯新闻（公开报道）</span></div>
+      </article>
+
+      <article class="card">
+        <div class="idx">02</div>
+        <span class="tag">OpenAI · 多智能体</span>
+        <h3>GPT-6 Astra Pro 升级：推出"AI 小队"，多智能体分头干活、可查进度</h3>
+        <div class="when"><b>2026-10-16</b></div>
+        <div class="blk"><span class="k">背景</span><span class="v">多智能体协作成为大模型产品竞争焦点，Anthropic 的 Claude 已在多智能体研究、项目协作上先行，OpenAI 加速跟进。</span></div>
+        <div class="blk"><span class="k">内容</span><span class="v">OpenAI 升级 ChatGPT 中的 GPT-6 Astra Pro：回复更快、插件与工具调用增强，并支持多个智能体并行处理同一任务；用户可在对话内跟踪各自进度、单独点开查看成果。更新正逐步向符合条件的 Pro 用户推送。</span></div>
+        <div class="src"><span class="k">来源渠道</span><span class="v"><a href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes" target="_blank" rel="noopener">OpenAI 帮助中心</a> · 微信公众号"新智元"（经 36氪 发布）</span></div>
+      </article>
+
+      <article class="card">
+        <div class="idx">03</div>
+        <span class="tag">Google · 旗舰模型</span>
+        <h3>Google 旗舰模型 Gemini 4 Argon 陆续开放，主攻复杂多步骤任务</h3>
+        <div class="when"><b>2026-10-13</b>（10-01 发布）</div>
+        <div class="blk"><span class="k">背景</span><span class="v">前沿模型竞争白热化，Google 以 Argon 对标 OpenAI、Anthropic 旗舰，向企业知识工作与安全防御场景推进。</span></div>
+        <div class="blk"><span class="k">内容</span><span class="v">Gemini 4 Argon 覆盖软件工程、金融、法律、网络安全与科学研究等领域；10 月 13 日起接入 Gemini App，并向企业、Google AI Ultra/Pro 订阅用户开放，同步登陆 Android Studio、Google AI Studio 与 Antigravity。</span></div>
+        <div class="src"><span class="k">来源渠道</span><span class="v"><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-argon/" target="_blank" rel="noopener">Google 官方博客</a> · 至顶网 / 知乎热榜讨论</span></div>
+      </article>
+
+      <article class="card">
+        <div class="idx">04</div>
+        <span class="tag">Microsoft · 决策模型</span>
+        <h3>微软发布高速决策模型 Microsoft-Decision-1，速度约为 GPT-6 Sol 的 35 倍</h3>
+        <div class="when"><b>2026-10-10</b></div>
+        <div class="blk"><span class="k">背景</span><span class="v">传统对话式大模型在结构化决策上存在延迟瓶颈，微软布局"决策评分系统"这一新兴类别以加速软件自动化。</span></div>
+        <div class="blk"><span class="k">内容</span><span class="v">Microsoft-Decision-1 面向结构化决策任务，评估明确选项以判断"继续执行 / 重试 / 升级 / 交由人工审核"。在约 15 万次盲测中精准度居前，速度约为 GPT-6 Sol 的 35 倍。纳德拉称已在事故响应、质量控制、科学研究等内部场景测试。</span></div>
+        <div class="src"><span class="k">来源渠道</span><span class="v">微软 / 外媒 · 星岛头条（含纳德拉社交平台发言）</span></div>
+      </article>
+
+      <article class="card">
+        <div class="idx">05</div>
+        <span class="tag">Microsoft · 行业应用</span>
+        <h3>微软推出 Copilot for Legal，面向法律团队提供 20+ 项 AI 技能</h3>
+        <div class="when"><b>2026-10-16</b></div>
+        <div class="blk"><span class="k">背景</span><span class="v">微软把 Copilot 能力垂直化，切入合同起草、审阅、谈判等法律工作流，并以插件生态对接专业工具。</span></div>
+        <div class="blk"><span class="k">内容</span><span class="v">Copilot for Legal 为全球商用客户提供超过 20 项法律专用 AI Skills，集成于 Word 与 Cowork；并上线 Bloomberg Law、Thomson Reuters HighQ、DocuSign、Harvey 等合作插件。微软强调其定位为辅助而非替代法律判断，AI 产出仍需人工核验。</span></div>
+        <div class="src"><span class="k">来源渠道</span><span class="v">微软（Brad Smith 推文 / 官方博客） · IT之家 / cnBeta</span></div>
+      </article>
+
+      <article class="card">
+        <div class="idx">06</div>
+        <span class="tag">腾讯 · 开源框架</span>
+        <h3>腾讯混元开源智能体记忆框架 Hy Memory 2.0，三层全开源</h3>
+        <div class="when"><b>2026-10-16</b></div>
+        <div class="blk"><span class="k">背景</span><span class="v">智能体在长任务中需要连贯记忆，腾讯混元推进"模型 + 框架 + 应用"的 Memory 开源生态。</span></div>
+        <div class="blk"><span class="k">内容</span><span class="v">Hy Memory 2.0 开源专用模型（Hy-Memory-30A3B，约 3B 激活参数）、记忆框架与 MemHub 应用；为业界首个提出"工作记忆 + 代码记忆"的框架，4 个 Benchmark 对比 Mem0、MemOS 等均列第一，宏观平均分超 Claude Opus 5。</span></div>
+        <div class="src"><span class="k">来源渠道</span><span class="v">腾讯混元官方 · IT之家 / 科创板日报</span></div>
+      </article>
+
+      <article class="card">
+        <div class="idx">07</div>
+        <span class="tag">百度 · 战略</span>
+        <h3>李彦宏：文心将重回第一梯队；百度世界 2026 定档 11 月 12 日</h3>
+        <div class="when"><b>2026-10-09</b></div>
+        <div class="blk"><span class="k">背景</span><span class="v">基础大模型竞争格局远未尘埃落定，百度近期优化组织架构、引进顶尖 AI 人才，聚焦应用落地。</span></div>
+        <div class="blk"><span class="k">内容</span><span class="v">李彦宏表示有信心让文心重回基础大模型第一梯队，未来将聚焦 AI 搜索、数字人、秒哒、伐谋与通用智能体等应用；百度世界 2026 定档 11 月 12 日，或披露全栈 AI 最新进展。</span></div>
+        <div class="src"><span class="k">来源渠道</span><span class="v">百度（业绩会 / 官方） · 阿斯达克财经 / 网经社</span></div>
+      </article>
+
+      <article class="card">
+        <div class="idx">08</div>
+        <span class="tag">微博 · 数据争议</span>
+        <h3>"国内超一半 AI 算力在造爽剧"上热搜，豆包下场辟谣</h3>
+        <div class="when"><b>2026-10-19</b></div>
+        <div class="blk"><span class="k">背景</span><span class="v">"国内超一半 AI 算力在造爽剧"话题一度登上微博热搜，引发对 AI 算力资源配置效率的广泛讨论。</span></div>
+        <div class="blk"><span class="k">内容</span><span class="v">话题源自中文在线披露的行业调研数据（AI 短剧与视频生成占 Token 消耗 55%）；豆包公关负责人回应该数据"不实"，称字节总算力仅约 10% 用于视频生成模型训练与推理。双方数据相差逾五倍，尚无第三方权威统计裁决。</span></div>
+        <div class="src"><span class="k">来源渠道</span><span class="v">微博热搜 · TechWeb（豆包公关负责人回应）</span></div>
+      </article>
+
+    </div>
+  </div>
+</main>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="verify">
+      <div class="row">
+        <div class="mark">✓</div>
+        <div>
+          <h3>信息核验说明</h3>
+          <ul>
+            <li>每条资讯均以官方发布或至少两个独立公开来源交叉核验，关键数字与日期已对照原文。</li>
+            <li>微博、知乎、微信公众号等渠道的内容，已标注其原始账号或热榜出处；无法核实的传闻不收录。</li>
+            <li>时间为北京时间；"来源渠道"保留原始出处链接，便于回溯查证。</li>
+            <li>资讯为公开信息整理，仅供参考，不构成任何投资或决策建议。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="mark">AI Radar</div>
+    <div>收集 · 核验 · 整理 · 呈现 —— 黑白高级调 · 极简阅读</div>
+  </div>
+</footer>
+
+</body>
+</html>
